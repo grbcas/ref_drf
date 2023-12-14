@@ -12,7 +12,7 @@ services:
       timeout: 3s
       retries: 5
 
-  postgres_db:
+  postgres_db:tggtvttt
     image: postgres:16.0
     env_file:
       - .env.docker

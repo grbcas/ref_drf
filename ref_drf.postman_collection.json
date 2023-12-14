@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "d80a4dd2-c34b-44c2-8896-bab7a7cba710",
+		"name": "ref_drf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "8278684"
+	},
+	"item": [
+		{
+			"name": "token",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "verification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json(); var bodyToken = responseJson.access; pm.environment.set(\"BearerToken\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone_number\": \"81234567822\",\r\n    \"password\": \"user_pswd\",\r\n    \"verification_code\": \"GHZB\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/verification/"
+			},
+			"response": []
+		},
+		{
+			"name": "get jwt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json(); var bodyToken = responseJson.access; pm.environment.set(\"BearerToken\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phone_number\": \"81234567822\",\r\n    \"password\": \"user_pswd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/verification/"
+			},
+			"response": []
+		},
+		{
+			"name": "registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json(); var bodyToken = responseJson.access; pm.environment.set(\"BearerToken\", bodyToken)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \r\n    \"phone_number\": \"89993332211\",\r\n    \"password\": \"user_pswd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/registration/"
+			},
+			"response": []
+		},
+		{
+			"name": "get user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{BearerToken}}"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer  {{BearerToken}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": "http://127.0.0.1:8000/api/user/40/"
+			},
+			"response": []
+		},
+		{
+			"name": "del user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{BearerToken}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer  {{BearerToken}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": "http://127.0.0.1:8000/api/user/39/"
+			},
+			"response": []
+		},
+		{
+			"name": "set invite code",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{BearerToken}}"
+					}
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer  {{BearerToken}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"invite_key\": \"OG64D5\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/user/42/"
+			},
+			"response": []
+		},
+		{
+			"name": "list of related users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{BearerToken}}"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer  {{BearerToken}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": "http://127.0.0.1:8000/api/user/profile/40/"
+			},
+			"response": []
+		}
+	]
+}
