@@ -14,23 +14,9 @@ class OnlyPhoneNumber(ValidationError):
             raise ValidationError(f'Incorrect phone number ')
 
 
-class CheckKeyActivation(ValidationError):
-    """Check key activation"""
-    def __call__(self, value) -> None:
-        # invite_key = user.invite_key
-        print(value, self.__dict__)
-        # if invite_key:
-        #     raise ValidationError(f'The invite_key is already set')
-
-
 class CheckIfKeyExists(ValidationError):
-    """CHeck if invite_key exists"""
+    """Check if invite_key exists"""
     def __call__(self, value) -> None:
         is_invite_key = User.objects.filter(own_invite_key=value).exists()
-        print('invite_keys', is_invite_key)
         if is_invite_key is False:
-            print(ValidationError(f'There is no such key'))
             raise ValidationError(f'There is no such key')
-#
-# if __name__ == '__main__':
-#     OnlyPhoneNumber('').__call__('+071112223344')

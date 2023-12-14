@@ -1,4 +1,5 @@
 from rest_framework import status, viewsets
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
@@ -46,14 +47,19 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         """set invite_key and related_user"""
-        user = self.request.user
-        print(request.data)
-        serializer = UserSerializer(user, data=request.data, partial=True) # set partial=True to update a data partially
+        # user = self.request.user
+        pk = self.kwargs.get('pk')
+        user = User.objects.get(pk=pk)
+        if user.invite_key:
+            raise ValidationError('invite_key is not empty')
+
+        # print(request.data)
+        serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             user.related_user = User.objects.exclude(own_invite_key=None).get(own_invite_key=user.invite_key)
             user.save()
-            print(user.__dict__)
+            # print(user.__dict__)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
