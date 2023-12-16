@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import User
 from rest_framework.generics import CreateAPIView, \
-    RetrieveUpdateDestroyAPIView, GenericAPIView, ListAPIView, RetrieveAPIView
+    RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from users.serializers import UserSerializer

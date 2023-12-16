@@ -1,7 +1,11 @@
-from django.urls import path, include
+from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from users.views import UserCreateAPIView, UserRetrieveUpdateDestroyAPIView, LoginView, UserVerification, UserProfile
+from users.views import UserCreateAPIView, \
+    UserRetrieveUpdateDestroyAPIView, \
+    LoginView, \
+    UserVerification, \
+    UserProfile
 from users.apps import UsersConfig
 
 app_name = UsersConfig.name
