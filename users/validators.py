@@ -10,7 +10,8 @@ class OnlyPhoneNumber(ValidationError):
         phone = re.sub(r'\b\D', '', value)
         clear_phone = re.sub(r'[\ \(\+]?', '', phone)
 
-        if not bool(re.findall(r'^[7|8]*?\d{10}$', clear_phone) and len(clear_phone) == 11):
+        if not bool(re.findall(r'^[7|8]*?\d{10}$', clear_phone)
+                    and len(clear_phone) == 11):
             raise ValidationError(f'Incorrect phone number: {value}')
 
 

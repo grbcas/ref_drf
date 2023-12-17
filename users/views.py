@@ -32,10 +32,9 @@ class UserCreateAPIView(CreateAPIView):
             user.set_password(password)
             code = generate_string(4)
             user.verification_code = code
-            task_send_code.s(code=code).apply_async(countdown=1)  # command for adding task in celery query
-            # task_send_code.delay(code=code)  # command for adding task in celery query
+            # command for adding task in celery query
+            task_send_code.s(code=code).apply_async(countdown=1)
 
-            print('user', user)
             user.save()
         return user
 
@@ -53,16 +52,21 @@ class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         if user.invite_key:
             raise ValidationError('invite_key is not empty')
 
-        # print(request.data)
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            user.related_user = User.objects.exclude(own_invite_key=None).get(own_invite_key=user.invite_key)
+            user.related_user = User.objects.exclude(own_invite_key=None).\
+                get(own_invite_key=user.invite_key)
             user.save()
-            # print(user.__dict__)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+            return Response(
+                data=serializer.data,
+                status=status.HTTP_200_OK
+            )
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class LoginView(TokenObtainPairView):
@@ -84,16 +88,17 @@ class LoginView(TokenObtainPairView):
 
 
 class UserVerification(GenericAPIView):
+    """activate user with valid verification_code"""
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
     # queryset = User.objects.all()
 
     def post(self, request: Request, *args, **kwargs) -> Response:
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         phone_number = request.data.get('phone_number')
         user = User.objects.get(phone_number=phone_number)
-        # activate user with valid verification_code
         if user.verification_code == request.data.get('verification_code'):
             user.is_active = True
             print(user.verification_code)

@@ -32,13 +32,40 @@ class User(AbstractUser):
     User model
     """
 
-    username = models.CharField(max_length=6, unique=True, verbose_name='username', **NULLABLE)
-    phone_number = models.CharField(max_length=12, unique=True, verbose_name='User phone number',)
-    own_invite_key = models.CharField(max_length=6, unique=True, verbose_name='Own_invite_key', **NULLABLE)
-    related_user = models.ForeignKey('User', on_delete=models.SET_NULL, verbose_name='Related_user', **NULLABLE)
-    invite_key = models.CharField(max_length=6, verbose_name='Invite_key', **NULLABLE)
+    username = models.CharField(
+        max_length=6,
+        unique=True,
+        verbose_name='username',
+        **NULLABLE
+    )
+    phone_number = models.CharField(
+        max_length=12,
+        unique=True,
+        verbose_name='User phone number',
+    )
+    own_invite_key = models.CharField(
+        max_length=6,
+        unique=True,
+        verbose_name='Own_invite_key',
+        **NULLABLE
+    )
+    related_user = models.ForeignKey(
+        'User', on_delete=models.SET_NULL,
+        verbose_name='Related_user',
+        **NULLABLE
+    )
+    invite_key = models.CharField(
+        max_length=6,
+        verbose_name='Invite_key',
+        **NULLABLE
+    )
     is_active = models.BooleanField(default=False)
-    verification_code = models.CharField(default='0000', max_length=4, verbose_name='Verification_code', **NULLABLE)
+    verification_code = models.CharField(
+        default='0000',
+        max_length=4,
+        verbose_name='Verification_code',
+        **NULLABLE
+    )
     objects = UserManager()
 
     USERNAME_FIELD = 'phone_number'
