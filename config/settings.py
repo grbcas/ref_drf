@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]  # ip ya.cloud
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').strip().split(',')  # ip ya.cloud
 
 
 # Application definition
@@ -160,8 +160,6 @@ LOGIN_REDIRECT_URL = 'profile/'
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
-# CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = "Europe/Moscow"

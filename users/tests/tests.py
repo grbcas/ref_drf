@@ -58,4 +58,4 @@ class UserTestCase(APITestCase):
         print(response.json().get('phone_number'),
               valid_data.get('phone_number'))
         self.assertEqual(response.json().get('phone_number'),
-                         {valid_data.get('phone_number')})
+                         valid_data.get('phone_number'))

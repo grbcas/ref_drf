@@ -31,7 +31,12 @@ urlpatterns = [
          UserRetrieveUpdateDestroyAPIView.as_view(),
          name='user'),
 
+    # path('api/user/profile/<int:pk>/',
+    #      UserProfile.as_view({'get': 'list'}),
+    #      name='user_profile'),
+
     path('api/user/profile/<int:pk>/',
-         UserProfile.as_view({'get': 'list'}),
+         UserProfile.as_view(),
          name='user_profile'),
+
 ]

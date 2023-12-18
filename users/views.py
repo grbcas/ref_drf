@@ -7,9 +7,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import User
 from rest_framework.generics import CreateAPIView, \
-    RetrieveUpdateDestroyAPIView, GenericAPIView
+    RetrieveUpdateDestroyAPIView, GenericAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from users.permissions import IsOwner, IsProfileOwner
 from users.serializers import UserSerializer
 from users.tasks import task_send_code
 from users.services import generate_string
@@ -41,7 +42,7 @@ class UserCreateAPIView(CreateAPIView):
 
 class UserRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
     queryset = User.objects.all()
 
     def patch(self, request, *args, **kwargs):
@@ -91,7 +92,6 @@ class UserVerification(GenericAPIView):
     """activate user with valid verification_code"""
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
-    # queryset = User.objects.all()
 
     def post(self, request: Request, *args, **kwargs) -> Response:
 
@@ -101,24 +101,24 @@ class UserVerification(GenericAPIView):
         user = User.objects.get(phone_number=phone_number)
         if user.verification_code == request.data.get('verification_code'):
             user.is_active = True
-            print(user.verification_code)
+            print(user.__dict__)
             user.save()
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
-class UserProfile(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+# class UserProfile(viewsets.ModelViewSet):
+
+class UserProfile(ListAPIView):
+    permission_classes = [IsProfileOwner]
     serializer_class = UserSerializer
-    queryset = User.objects.all()
 
     def get_queryset(self):
         pk = self.kwargs.get("pk")
-        # user = self.request.user
-        print(User.objects.filter(related_user=pk))
-        return User.objects.filter(related_user=pk)
-
-    def get_object(self):
-
-        queryset = self.get_queryset()
+        queryset = User.objects.values('phone_number').filter(related_user=pk)
+        print(queryset)
         return queryset
+
+    # def get_object(self):
+    #     print(self.queryset.values('phone_number'))
+    #     return self.queryset.values('phone_number')

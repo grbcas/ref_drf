@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from users.validators import OnlyPhoneNumber, CheckIfKeyExists
 from users.models import User
@@ -10,18 +11,38 @@ class UserSerializer(serializers.ModelSerializer):
         max_length=12,
         validators=[OnlyPhoneNumber()]
     )
-    invite_key = serializers.CharField(
+
+    invite_key = serializers.HiddenField(
         default=None,
-        max_length=6,
-        validators=[CheckIfKeyExists()]
+        validators=[CheckIfKeyExists()],
+    )
+
+    verification_code = serializers.HiddenField(
+        default=None,
+        validators=[CheckIfKeyExists()],
     )
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'pk',
+            'password',
+            'phone_number',
+            'invite_key',
+            'verification_code'
+        )
 
     def create(self, validated_data):
-        user = User(**validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+        print(validated_data)
+        user, created = User.objects.get_or_create(
+            phone_number=validated_data['phone_number'],
+        )
+        # user = User(**validated_data)
+        if created:
+            user.set_password(validated_data['password'])
+            user.save()
+            return user
+
+        raise ValidationError(
+            f'User with {validated_data["phone_number"]} already exists'
+        )
