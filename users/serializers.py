@@ -12,12 +12,13 @@ class UserSerializer(serializers.ModelSerializer):
         validators=[OnlyPhoneNumber()]
     )
 
-    invite_key = serializers.HiddenField(
+    invite_key = serializers.CharField(
         default=None,
         validators=[CheckIfKeyExists()],
     )
 
-    verification_code = serializers.HiddenField(
+    verification_code = serializers.CharField(
+        write_only=True,
         default=None,
         validators=[CheckIfKeyExists()],
     )
