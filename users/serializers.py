@@ -19,8 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     verification_code = serializers.CharField(
         write_only=True,
-        default=None,
-        validators=[CheckIfKeyExists()],
+        default=None
     )
 
     class Meta:
